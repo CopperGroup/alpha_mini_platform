@@ -1,4 +1,3 @@
-
 # deploy/setup.py
 
 from setuptools import setup, find_packages
@@ -18,24 +17,25 @@ def read_requirements():
 
 setup(
     name='alpha_platform_custom', 
-    version='2.0.0', # Оновлена версія для масштабованої платформи
+    version='2.0.0', 
     description='Scalable command platform for UBTECH Alpha Mini Robot',
     author='Copper Group Corporation in partnership with Yevhenii Tymchyk and Yelizaveta Piletska',
     
-    # 1. Знаходимо пакети у каталозі 'src'
+    # 1. Спрощений пошук: find_packages знайде alpha_mini_pkg та listeners всередині src/
     packages=find_packages(where=os.path.join(PROJECT_ROOT, 'src')),
     
-    # 2. Вказуємо, де знаходяться пакети
+    # 2. Вказуємо, що коренем пакетів є src
     package_dir={'': os.path.join(PROJECT_ROOT, 'src')},
+    
+    # Видаляємо всі складні конструкції package_dir, find_packages, PACKAGES.
     
     # Вимоги
     install_requires=read_requirements(),
     
-    # Визначаємо вхідну точку (для запуску з терміналу)
+    # КЛЮЧОВА ЗМІНА: Вказуємо на launcher.py всередині alpha_mini_pkg (який в src)
     entry_points={
         'console_scripts': [
-            # Вказуємо на main.py в корені проєкту
-            'run_alpha_platform = main:main', 
+            'run_alpha_platform = alpha_mini_pkg.launcher:run', 
         ],
     },
     

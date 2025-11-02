@@ -4,8 +4,8 @@ import asyncio
 import logging
 from typing import Callable, Coroutine, Any, Optional
 from mini.apis.api_observe import SpeechRecogniseResponse
-from alpha_mini_pkg.core import get_speech_listener_observer
-from alpha_mini_pkg.core import actions_wrapper # Для виконання дій в callback
+# ВИПРАВЛЕННЯ ЦИКЛІЧНОГО ІМПОРТУ: Імпортуємо необхідні функції напряму
+from .actions_wrapper import get_speech_listener_observer, action_speak 
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ SpeechCallback = Callable[[str], Coroutine]
 
 class DynamicListener:
     """
-    Клас, який обгортає SDK ObserveSpeechRecognise, надаючи динамічний
+    Клас, що обгортає SDK ObserveSpeechRecognise, надаючи динамічний
     інтерфейс для керування прослуховуванням, включаючи:
     - Реєстрацію обробників для кожної розпізнаної фрази (on_speaking).
     - Умову автоматичної зупинки (stop_when).
@@ -22,7 +22,9 @@ class DynamicListener:
 
     def __init__(self, loop: asyncio.AbstractEventLoop):
         self._loop = loop
-        self._observer = get_speech_listener_observer()
+        # Отримуємо об'єкт спостерігача через обгортку CORE
+        # Тепер імпортовано напряму з actions_wrapper
+        self._observer = get_speech_listener_observer() 
         self._is_listening = False
         self._on_speaking_callback: Optional[SpeechCallback] = None
         self._stop_phrase: Optional[str] = None
@@ -90,9 +92,11 @@ class DynamicListener:
             result = await self._stop_future
             return result # Повертаємо результат, встановлений у _internal_handler
         except asyncio.CancelledError:
+            self.stop()
             return ""
         finally:
-            self.stop()
+            # Фінальна чиста зупинка на випадок, якщо future було скасовано ззовні
+            self.stop() 
 
     def stop(self):
         """ Зупиняє прослуховування і очищує стан. """
