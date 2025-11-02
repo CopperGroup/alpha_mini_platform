@@ -1,0 +1,28 @@
+└── 📁alpha_platform           # Головний репозиторій/проєкт
+    ├── 📁src
+    │   └── 📁alpha_mini_pkg     # Python пакет проєкту
+    │       ├── 📁algorithms     # НОВИЙ ШАР: Для складних алгоритмів та стратегій
+    │       │   ├── __init__.py
+    │       │   └── path_planning.py   # Приклад: Алгоритм планування
+    │       ├── 📁config         # Конфігурація
+    │       │   ├── __init__.py
+    │       │   └── settings.py  # Всі константи (IP, PORT, LOG_LEVEL, ROBOT_TYPE)
+    │       ├── 📁core           # Бізнес-логіка та координація (високого рівня)
+    │       │     ├── __init__.py
+    │       │     ├── command_handler.py # Координатор, який вирішує, що робити.
+    │       │     └── actions_wrapper.py # Обгортки над API: walk(), speak(), listen()
+    │       ├── 📁services       # API-взаємодія та низькорівневі з'єднання
+    │       │     ├── __init__.py
+    │       │     ├── api_client.py     # Прямі виклики SDK (MoveRobot, StartPlayTTS)
+    │       │     └── connection_manager.py # Підключення/Відключення, налаштування SDK
+    │       ├── 📁utils          # Загальні утиліти
+    │       │     ├── __init__.py
+    │       │     └── helpers.py        
+    │       └── __init__.py      
+    ├── 📁deploy                 # Налаштування розгортання
+    │   └── setup.py             
+    ├── 📁listeners              # Різні слухачі команд
+    │     ├── __init__.py
+    │     └── speech_listener.py  
+    ├── main.py                # Основна точка входу (максимально чиста)
+    └── requirements.txt
