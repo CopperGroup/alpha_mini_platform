@@ -1,5 +1,3 @@
-# src/alpha_mini_pkg/services/__init__.py
-
 from .connection_manager import connect_robot, shutdown, initialize_sdk
 from .api_client import (
     move_robot, 
